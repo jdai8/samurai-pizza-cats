@@ -1,0 +1,25 @@
+{
+  "name": "samurai-pizza-cats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdai8/samurai-pizza-cats.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jdai8/samurai-pizza-cats/issues"
+  },
+  "homepage": "https://github.com/jdai8/samurai-pizza-cats#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "request": "^2.74.0"
+  }
+}
