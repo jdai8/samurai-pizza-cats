@@ -32,7 +32,7 @@ client.message(command, {}).then((data) => {
   }
 
   //if there is age entity, get its confidence and value.
-  if(typeof data.entities.number != 'undefined'){
+  else if(typeof data.entities.number != 'undefined'){
   	ageConfidence = data.entities.number[0].confidence;
   	ageValue = data.entities.number[0].value;
   	console.log("age: " + ageConfidence + " " + ageValue);
