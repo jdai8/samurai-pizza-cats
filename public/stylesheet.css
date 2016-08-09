@@ -1,0 +1,37 @@
+body{
+	position: relative;
+}
+
+#intro{
+	margin-top: 50px;
+	font-size: 30px;
+	text-align: center;
+	letter-spacing: -1px;
+}
+
+#response{
+	width: 80%;
+	height: 60%;
+	margin-left: 10%;
+	background-color: #efefef;
+}
+
+#header{
+	text-align: left;
+	padding-left: 30px;
+	width: 100%;
+	background-color: rgb(48, 54, 169);
+	color: #ffffff;
+	padding-top: 1%;
+	padding-bottom: 1%;
+}
+
+#header p{
+	margin-top: 1%;
+	font-size: 30px;
+}
+
+.mdl-textfield{
+	margin-left: 25%;
+	width: 50%;
+}

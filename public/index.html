@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <link rel="stylesheet" type = "text/css" href="./stylesheet.css"></link>
+    </head>
+    <body>
+        <div id = "header">
+            <p>JackBot</p>
+        </div>
+        <p id = "intro">Nice to meet you! My name is Jack.</p>
+        <!-- Simple Textfield -->
+        <form id = "textfield" action="#" onsubmit="request()">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" id = "user_input" type="text" id="sample1">
+            <label class="mdl-textfield__label" for="sample1">What would you like me to do?</label>
+        </div>
+        </form>
+
+        <div id = "response">
+        </div>
+    </body>
+
+    <script>
+
+    function request(){
+        var inputVariable = document.getElementById('user_input').value;
+        console.log(inputVariable);
+
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        oReq.open("GET", "http://www.example.org/example.txt");
+        oReq.send();
+    }
+
+    </script>
+</html>
