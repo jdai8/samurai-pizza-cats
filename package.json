@@ -20,6 +20,7 @@
   "homepage": "https://github.com/jdai8/samurai-pizza-cats#readme",
   "dependencies": {
     "express": "^4.14.0",
+    "fast-csv": "^2.1.0",
     "node-wit": "^4.0.0",
     "request": "^2.74.0"
   }

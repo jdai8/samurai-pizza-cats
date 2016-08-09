@@ -1,41 +1,77 @@
 //required dependencies and key
 const Wit = require('../node_modules/node-wit/lib/wit.js').Wit;
-const client = new Wit({accessToken: 'S6CR2CDZVXD7W7RIRSSCLCCMWQLPCMC4'});
+const fs = require('fs');
 
-//the user's command, !subject to change -> get it from front-end!
-var command = 'give me people who are older than 26';
+const KEY = fs.readFileSync('./wit.key', { encoding: 'utf-8' }).trim();
+const client = new Wit({accessToken: KEY});
 
-/*Some possible entities within the JSON.
-we need to predefine these variables as nulls, because they will possibly be changed later.*/
-var gender = null;
-var genderConfidence = null;
-var genderValue = null;
-var ageConfidence = null;
-var ageValue = null;
-var number = null;
+// get entities from wit ai, return a promise for the appropriate filter fn
+function parseCommand(command) {
 
-//contacting Wit AI and retrieving the JSON format of response
-client.message(command, {}).then((data) => {
+  //the user's command, !subject to change -> get it from front-end!
+  command  = command || 'give me people who are older than 26'
 
-  //predicate will always almost be present.
-  var predicateConfidence = data.entities.predicate[0].confidence;
-  var predicateValue = data.entities.predicate[0].value;
+  //contacting Wit AI and retrieving the JSON format of response
+  return client.message(command, {}).then((data) => {
+    console.log(data.entities);
+    return getFilter(data.entities);
 
-  //print out the predicates for testing
-  console.log('predicates: ' + predicateConfidence + " " + predicateValue);
+  }).catch(console.error);
+}
 
-  //if there is gender entity, get its confidence and value.
-  if(typeof data.entities.gender != 'undefined'){
-  	genderConfidence = data.entities.gender[0].confidence;
-  	genderValue = data.entities.gender[0].value;
-  	console.log("gender: " + genderConfidence + " " + genderValue);
+function getFilter(entities) {
+
+  let p;
+  if (!entities.predicate) {
+    p = { value: 'equal' };
+  } else {
+    p = entities.predicate.find(x => x.value !== 'equal') ||
+      { value: 'equal' }
+  }
+  console.log('p', p);
+  const predicate = predicates[p.value];
+
+  let getter;
+  if (entities.lastnamefield) {
+    getter = getters.lastnamefield;
+  } else if (entities.firstnamefield) {
+    getter = getters.firstnamefield;
+  } else if (entities.idfield) {
+    getter = getters.idfield;
+  } else if (entities.emailfield || entities.email) {
+    getter= getters.emailfield;
+  } else if (entities.gender) {
+    getter = getters.gender;
   }
 
-  //if there is age entity, get its confidence and value.
-  else if(typeof data.entities.number != 'undefined'){
-  	ageConfidence = data.entities.number[0].confidence;
-  	ageValue = data.entities.number[0].value;
-  	console.log("age: " + ageConfidence + " " + ageValue);
+  let arg;
+  if (entities.gender) {
+    arg = entities.gender[0].value;
+  } else if (entities.email) {
+    arg = entities.email[0].value;
+  } else if (entities.number) {
+    arg = entities.number[0].value;
+  } else if (entities.contact) {
+    arg = entities.contact[0].value;
   }
 
-}).catch(console.error);
+  console.log(predicate, getter, arg);
+  return x => predicate(arg)(getter(x));
+}
+
+const getters = {
+  firstnamefield: x => x.first_name.toLowerCase(),
+  lastnamefield: x => x.last_name.toLowerCase(),
+  idfield: x => parseInt(x.id),
+  emailfield: x => x.email,
+  gender: x => x.gender.toLowerCase()
+};
+
+const predicates = {
+  contains: arg => x => x.indexOf(arg) !== -1,
+  equal: arg => x => x == arg,
+  smaller: arg => x => x < arg,
+  greater: arg => x => x > arg
+};
+
+module.exports = parseCommand;
