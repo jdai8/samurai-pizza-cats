@@ -12,10 +12,11 @@
         </div>
         <p id = "intro">Nice to meet you! My name is Jack.</p>
         <!-- Simple Textfield -->
-        <form id = "textfield" action="#" onsubmit="request()">
+        <form id = "textfield">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input class="mdl-textfield__input" id = "user_input" type="text" id="sample1">
             <label class="mdl-textfield__label" for="sample1">What would you like me to do?</label>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id="go"> Go </button>
         </div>
         </form>
 
@@ -25,13 +26,18 @@
 
     <script>
 
+document.getElementById('go').onclick = function() { request(); };
+
     function request(){
         var inputVariable = document.getElementById('user_input').value;
         console.log(inputVariable);
 
         var oReq = new XMLHttpRequest();
-        oReq.addEventListener("load", reqListener);
-        oReq.open("GET", "http://www.example.org/example.txt");
+        oReq.addEventListener("load", function() {
+          console.log(oReq.responseText);
+          document.getElementById('response').innerHTML = oReq.responseText;
+        });
+        oReq.open("GET", "/query?input=" + inputVariable);
         oReq.send();
     }
 

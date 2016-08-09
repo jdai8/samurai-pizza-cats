@@ -7,6 +7,8 @@ const app = express();
 
 const array = parseCSV(readCSV()).slice(0,500);
 
+app.use(express.static(__dirname + '/public'));
+
 app.get('/query', function(request, response) {
 
   parseCommand(request.query.input).then(filter => {
